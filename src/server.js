@@ -17,7 +17,7 @@ const typeDefs = `
 // Resolvers
 const resolvers = {
     Query: {
-        info: () => 'This is the API of a Hackernews clone'
+        info: () => "Not null"
     }
 }
 
@@ -28,7 +28,7 @@ const server = new ApolloServer({
 })
 
 server
-.lister()
+.listen()
 .then(({ url }) =>
 console.log(`Server is running on ${url}`)
 )
