@@ -1,5 +1,13 @@
 const { apolloServer, ApolloServer } = require('apollo-server')
 
+const fs = require('fs');
+const path = require('path');
+
+const typeDefs = fs.readFileSync(
+    path.join(__dirname, 'schema.graphql'),
+    'utf8'
+  )
+
 // Schema
 // The typeDefs constant defines your GraphQL
 // schema (more about this in a bit). Here, it 
@@ -8,18 +16,7 @@ const { apolloServer, ApolloServer } = require('apollo-server')
 // The exclamation mark in the type definition 
 // means that this field is required 
 // and can never be null.
-const typeDefs = `
-  type Query {
-    info: String!
-    feed: [Link!]!
-  }
 
-  type Link {
-    id: ID!
-    description: String!
-    url: String!
-  }
-`
 
 let links = [{
     id: 'link-0',
@@ -27,17 +24,25 @@ let links = [{
     description: 'Fullstack tutorial for GraphQL'
   }]
   
+  let idCount = links.length
+
   const resolvers = {
     Query: {
       info: () => `This is the API of a Hackernews Clone`,
       // 2
       feed: () => links,
     },
-    // 3
-    Link: {
-      id: (parent) => parent.id,
-      description: (parent) => parent.description,
-      url: (parent) => parent.url,
+    Mutation: {
+        post: (parent, args) => {
+            const link = {
+                id: `link-${idCount++}`,
+                description: args.description,
+                url: args.url
+            }
+            // Add to Database
+            links.push(link)
+            return link
+        }
     }
   }
 
