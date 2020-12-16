@@ -31,16 +31,7 @@ const typeDefs = fs.readFileSync(
       },
     },
     Mutation: {
-        post: (parent, args, context, info) => {
-            const newLink = context.prisma.link.create({
-              data: {
-                url: args.url,
-                description: args.description
-              }
-            })
-
-            return newLink
-        }
+    
     }
   }
 
@@ -48,13 +39,12 @@ const typeDefs = fs.readFileSync(
 const server = new ApolloServer({
     typeDefs,
     resolvers,
-    context: ({ req }) => {
+    context: (  {req} ) {
       return {
         ...req,
         prisma,
-        pubsub,
         userId: 
-          req && req.headers.authorization ? getUserId(req) : nul
+          req && req.headers.authorization ? getUserId(req) : null
       }
     }
 })
