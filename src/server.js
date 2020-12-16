@@ -7,8 +7,6 @@ const prisma = new PrismaClient()
 const fs = require('fs');
 const path = require('path');
 
-console.log(pubsub)
-
 const typeDefs = fs.readFileSync(
     path.join(__dirname, 'schema.graphql'),
     'utf8'
@@ -50,8 +48,14 @@ const typeDefs = fs.readFileSync(
 const server = new ApolloServer({
     typeDefs,
     resolvers,
-    context: {
-      prisma
+    context: ({ req }) => {
+      return {
+        ...req,
+        prisma,
+        pubsub,
+        userId: 
+          req && req.headers.authorization ? getUserId(req) : nul
+      }
     }
 })
 
