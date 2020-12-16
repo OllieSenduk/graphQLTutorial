@@ -1,8 +1,13 @@
-const { apolloServer, ApolloServer } = require('apollo-server')
+const { apolloServer, ApolloServer, PubSub } = require('apollo-server')
 const { PrismaClient } = require('@prisma/client')
+
+const pubsub = new PubSub()
+const prisma = new PrismaClient()
 
 const fs = require('fs');
 const path = require('path');
+
+console.log(pubsub)
 
 const typeDefs = fs.readFileSync(
     path.join(__dirname, 'schema.graphql'),
@@ -18,8 +23,6 @@ const typeDefs = fs.readFileSync(
 // means that this field is required 
 // and can never be null.
 
-
-  let idCount = links.length
 
   const resolvers = {
     Query: {
