@@ -8,5 +8,5 @@ function info(parent, args, context, info) {
 
 module.exports = {
     feed,
-    info
+    info,
 }

@@ -7,7 +7,7 @@ const signup = async (parent, args, context, info) => {
 
     const user = await context.prisma.user.create({ data: { ...args, password}})
 
-    const token = jwt.sing({userId: user.id,}, APP_SECRET)
+    const token = jwt.sign({userId: user.id,}, process.env.APP_SECRET)
 
     return {
         token,
@@ -15,7 +15,7 @@ const signup = async (parent, args, context, info) => {
     }
 }
 
-const login = async (parent, args, context, info) {
+const login = async (parent, args, context, info) => {
     const user = await context.prisma.user.findUnique({ where: {email: args.email} } )
     if (!user) {
         throw new Error('No such user found')
@@ -36,7 +36,6 @@ const login = async (parent, args, context, info) {
 
 const post = async (parent, args, context, info) => {
     const { userId } = context 
-
     return await context.prisma.link.create({
         data: {
             url: args.url,
